@@ -10,7 +10,10 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sample": "node scripts/generate-sample-statement.mjs",
+    "verify": "npm run typecheck && npm run lint && npm test",
+    "deploy": "npm run verify && npm run build && firebase deploy --only hosting"
   },
   "dependencies": {
     "lightweight-charts": "^4.2.3",

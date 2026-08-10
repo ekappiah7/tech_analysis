@@ -106,6 +106,55 @@ Stooq sends no CORS headers, so it cannot be called from a browser directly. Set
 `VITE_STOOQ_PROXY` to a proxy you control to enable it; without it the adapter
 fails loudly rather than appearing to work.
 
+## Deploying to Firebase Hosting
+
+The app is fully static — no server, no database, no Cloud Functions. Firebase
+Hosting serves the built `dist/` directory and nothing else is required.
+
+First time only:
+
+```bash
+npm install -g firebase-tools
+firebase login
+firebase use --add        # pick your project, alias it "default"
+```
+
+That writes `.firebaserc`, which is safe to commit. `firebase.json` is already
+in the repo and is configured for two things that matter:
+
+- **SPA rewrites.** Every path falls through to `index.html`. Without this,
+  loading `/audit` directly or refreshing the page returns a 404 — the router
+  runs in the browser, and Hosting knows nothing about those routes.
+- **Cache headers.** Hashed bundles under `/assets` are immutable for a year;
+  `index.html` is never cached, so a deploy takes effect immediately rather than
+  leaving you on a stale build.
+
+Then deploy:
+
+```bash
+npm run deploy      # typecheck + lint + test, then build, then deploy
+```
+
+`npm run verify` runs the checks on their own if you want them without shipping.
+
+### Do not put the API key in the build
+
+Vite inlines every `VITE_*` variable into the JavaScript bundle at build time.
+Setting `VITE_TWELVEDATA_API_KEY` and deploying publishes that key to anyone who
+opens devtools, and a free-tier key is 800 requests/day someone else can spend.
+
+Use the field on the Charts page instead — it stores the key in your own
+browser, so you and your trainer each hold your own and neither ends up in the
+bundle. `.env` is for local development only.
+
+### A note on access
+
+Firebase Hosting is public: anyone with the URL can open the app. That is
+usually fine here, because trade files are parsed in the browser and never
+uploaded — there is no stored data to expose. If you would rather it not be
+reachable at all, Firebase Auth with an email allowlist is the smallest thing
+that closes it, and it would need adding.
+
 ## Layout
 
 ```

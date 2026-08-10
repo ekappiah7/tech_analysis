@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#0b0e14" />
+  <!-- A distribution curve behind the candles: the whole point of the app is
+       reading a track record as a distribution rather than a single outcome. -->
+  <path
+    d="M6 46 C 16 46, 18 20, 32 20 C 46 20, 48 46, 58 46"
+    fill="none"
+    stroke="#8b97a8"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    opacity="0.55"
+  />
+  <g stroke-linecap="round">
+    <line x1="20" y1="26" x2="20" y2="52" stroke="#26a69a" stroke-width="2.5" />
+    <rect x="16" y="32" width="8" height="14" rx="1.5" fill="#26a69a" />
+    <line x1="44" y1="18" x2="44" y2="44" stroke="#ef5350" stroke-width="2.5" />
+    <rect x="40" y="24" width="8" height="14" rx="1.5" fill="#ef5350" />
+  </g>
+</svg>
