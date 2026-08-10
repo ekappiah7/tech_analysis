@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-ink text-slate-200 antialiased;
+    font-family:
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      "Segoe UI",
+      sans-serif;
+  }
+
+  /* Figures are read in columns and compared line to line — they need to line up. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    @apply font-mono;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-lg border border-edge bg-panel;
+  }
+
+  .panel-heading {
+    @apply border-b border-edge px-5 py-3 text-sm font-semibold tracking-wide text-slate-300;
+  }
+
+  .label {
+    @apply text-xs uppercase tracking-wider text-muted;
+  }
+}
