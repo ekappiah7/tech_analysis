@@ -106,6 +106,70 @@ Stooq sends no CORS headers, so it cannot be called from a browser directly. Set
 `VITE_STOOQ_PROXY` to a proxy you control to enable it; without it the adapter
 fails loudly rather than appearing to work.
 
+## MCP server
+
+The same statistics are exposed over the Model Context Protocol, so an AI agent
+can run an audit instead of improvising one. This matters because a language
+model asked "is my strategy any good?" will give a fluent, confident answer
+without having run a single test — these tools give it a real one to relay.
+
+```bash
+npm run build:mcp     # bundles to dist-mcp/server.js
+```
+
+Register it with any MCP client. For Claude Code:
+
+```json
+{
+  "mcpServers": {
+    "technical-analysis": {
+      "command": "node",
+      "args": ["/absolute/path/to/tech_analysis/dist-mcp/server.js"]
+    }
+  }
+}
+```
+
+Three tools:
+
+| Tool | Purpose |
+|---|---|
+| `audit_trades` | Full audit on a list of closed trades passed as JSON — the path to use when trades were fetched from a platform |
+| `audit_statement_file` | Reads a statement from disk and audits it, format detected from content |
+| `parse_statement_file` | Parses only, returning normalised trades — for inspecting what was imported |
+
+Both audit tools accept `trialsTested`, `brokerUtcOffsetHours`, `projectionHorizon`,
+`seed`, and `format` (`markdown` or `json`).
+
+The report is written to be read by a model, not just rendered: each verdict
+carries an explicit statement of what it does and does not license, because a
+positive net P&L under a "no evidence of edge" verdict will otherwise be
+summarised as a win.
+
+### Using it with MetaTrader 5
+
+MetaTrader 5 gained its own MCP support in build 6030 (July 2026), which turns
+the terminal into a data source an agent can query directly. Combined with this
+server, the manual export step disappears:
+
+```
+MT5 (MCP server)  ->  agent  ->  this server (MCP)  ->  verdict
+   reads deals        orchestrates   bootstrap, DSR, BH correction
+```
+
+The two servers do not talk to each other; the agent is the bridge, calling one
+and passing the result to the other. `audit_trades` takes exactly the shape a
+deals query returns — symbol, direction, open/close time, profit — and tolerates
+missing fields.
+
+Set `brokerUtcOffsetHours` when the trades come from MetaTrader. Its clock is
+broker server time, usually UTC+2 or UTC+3, and without the correction the
+session breakdown attributes trades to the wrong window entirely.
+
+Note that the web app cannot use any of this: MCP servers are local processes,
+and a browser page on a public domain neither can nor should reach them. The MCP
+server is a separate local entry point sharing the same engine.
+
 ## Deploying to Firebase Hosting
 
 The app is fully static — no server, no database, no Cloud Functions. Firebase
