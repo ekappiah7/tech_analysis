@@ -170,6 +170,23 @@ Note that the web app cannot use any of this: MCP servers are local processes,
 and a browser page on a public domain neither can nor should reach them. The MCP
 server is a separate local entry point sharing the same engine.
 
+## Installing it as an app
+
+The build is a PWA: a manifest, a service worker, and an install prompt. On
+Android, Chrome offers "Install" and it lands on the home screen as a standalone
+app. On iOS use Share -> Add to Home Screen.
+
+Installing is worth doing because the audit is pure client-side computation —
+the shell and the sample statement are precached, so a statement can be dropped
+in and fully audited with no connection at all. Live charts are the only part
+that needs the network, and market-data requests are deliberately never served
+from cache: a chart quietly showing yesterday's price is worse than one that
+fails to load.
+
+```bash
+npm run icons     # regenerate the icon set from public/favicon.svg
+```
+
 ## Deploying to Firebase Hosting
 
 The app is fully static — no server, no database, no Cloud Functions. Firebase

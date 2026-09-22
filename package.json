@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "build:mcp": "vite build --config vite.mcp.config.ts",
     "mcp": "node dist-mcp/server.js",
+    "icons": "node scripts/generate-icons.mjs",
     "sample": "node scripts/generate-sample-statement.mjs",
     "verify": "npm run typecheck && npm run lint && npm test",
     "deploy": "npm run verify && npm run build && firebase deploy --only hosting"
@@ -41,10 +42,12 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^15.15.0",
     "postcss": "^8.5.6",
+    "sharp": "^0.35.4",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
     "vite": "^5.4.19",
+    "vite-plugin-pwa": "^1.3.0",
     "vitest": "^3.2.4"
   }
 }

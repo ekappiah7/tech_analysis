@@ -1,6 +1,7 @@
 import { BrowserRouter, NavLink, Navigate, Route, Routes } from "react-router-dom";
 import AuditPage from "./pages/AuditPage";
 import ChartPage from "./pages/ChartPage";
+import { InstallBanner, OfflineBar, UpdateToast } from "./components/PwaPrompts";
 
 function Nav() {
   const linkClass = ({ isActive }: { isActive: boolean }) =>
@@ -31,6 +32,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen">
+        <OfflineBar />
         <Nav />
         <main>
           <Routes>
@@ -44,6 +46,8 @@ export default function App() {
           Analytics on your own trading records. Not investment advice, not a
           recommendation to trade, and no part of it predicts future returns.
         </footer>
+        <InstallBanner />
+        <UpdateToast />
       </div>
     </BrowserRouter>
   );
